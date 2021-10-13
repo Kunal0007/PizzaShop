@@ -2,7 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Products from './Product_home'
 
-const Home = () => {
+const Home = (props) => {
+
+  const {showAlert} = props;
+
   return (
     <>
       <div className="home container grid">
@@ -21,7 +24,7 @@ const Home = () => {
       </div>
 
       <div className="products container grid">
-        <Products />
+        <Products showAlert={showAlert} />
       </div>
     </>
   );

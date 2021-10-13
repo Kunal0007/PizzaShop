@@ -1,49 +1,66 @@
 import { React, useContext, useState } from 'react'
-import { Link } from "react-router-dom";
-import { CartContext } from './CartContext';
+import { Link, useHistory } from "react-router-dom";
+import CartContext from './context/cart/CartContext';
 
 const Product = (props) => {
     const [isAdding, setIsAdding] = useState(false);
+    
+    const history = useHistory();
 
-    const { cart, setCart } = useContext(CartContext);
+    const { addToCart } = useContext(CartContext);
 
-    const { product } = props;
+    const { product, showAlert } = props;
 
-    const addToCart = (event, product) => {
+    const handleClick = (e) => {
+        e.preventDefault();
 
-        let _cart = { ...cart };
+        if (localStorage.getItem('token')) {
+            addToCart(product._id, 1);
 
-        if (!_cart.items) {
-            _cart.items = {};
+            showAlert("Added to Cart", "success");
+
+            setIsAdding(true);
+
+            setInterval(() => {
+                setIsAdding(false);
+            }, 800);
+        }
+        else {
+            history.push("/login");
+            showAlert("Please Login", "warning");
         }
 
-        if (_cart.items[product._id]) {
-            _cart.items[product._id] += 1;
-        } else {
-            _cart.items[product._id] = 1;
-        }
-
-        if (!_cart.totalItem) {
-            _cart.totalItem = 0;
-        }
-
-        _cart.totalItem += 1;
-
-        setCart(_cart);
-
-        setIsAdding(true);
-
-        setInterval(() => {
-            setIsAdding(false);
-        }, 800);
     }
+
+    // const addToCart = (event, product) => {
+
+    //     let _cart = { ...cart };
+
+    //     if (!_cart.items) {
+    //         _cart.items = {};
+    //     }
+
+    //     if (_cart.items[product._id]) {
+    //         _cart.items[product._id] += 1;
+    //     } else {
+    //         _cart.items[product._id] = 1;
+    //     }
+
+    //     if (!_cart.totalItem) {
+    //         _cart.totalItem = 0;
+    //     }
+
+    //     _cart.totalItem += 1;
+
+    //     setCart(_cart);
+    // }
 
     return (
         <div>
             <li className="product__item">
                 <Link to={`/product/${product._id}`}>
                     <div className="product__img grid">
-                        <img src={product.image} width="220px" height="220px" alt="" />
+                        <img src={ `${product.image}` } width="220px" height="220px" alt="" />
                     </div>
                 </Link>
                 <div style={{ textAlign: 'center' }}>
@@ -53,7 +70,7 @@ const Product = (props) => {
 
                 <div className="product__info">
                     <span>₹ {product.price}</span>
-                    <button disabled={isAdding} className={` add ${isAdding ? 'added' : 'none'} `} onClick={(e) => { addToCart(e, product) }}>
+                    <button disabled={isAdding} className={` add ${isAdding ? 'added' : 'none'} `} onClick={handleClick}>
                         ADD{isAdding ? 'ED' : ''}
                     </button>
                 </div>

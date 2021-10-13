@@ -79,6 +79,7 @@ img{
 
 .nav__list {
     display: flex;
+    align-items: center;
     column-gap: 3rem;
 }
 
@@ -93,7 +94,7 @@ img{
 .cart {
     background-color: rgb(99, 214, 21);
     padding: 0.2rem 0.4rem;
-    border-radius: 1rem;
+    border-radius: 0.8rem;
     color: #fff;
 }
 
@@ -221,7 +222,7 @@ img{
 }
 
 .cart__item {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     align-items: center;
     text-align: center;
 }
@@ -237,6 +238,7 @@ img{
 }
 
 .quantity__btn {
+    cursor: pointer;
     background-color: rgb(99, 214, 21);
     padding: 0.2rem 0.8rem;
     border-style: none;
@@ -250,6 +252,7 @@ img{
 }
 
 .delete__btn {
+    cursor: pointer;
     background-color: rgb(216, 73, 73);
     color: #fff;
     padding: 0.3rem 0.6rem;
@@ -270,4 +273,51 @@ img{
     border-radius: 1rem;
     font-family: var(--body-font);
     font-weight: var(--font-medium);
+}
+
+.login_page {
+    margin: 8rem 3rem;
+    justify-content: center;
+}
+
+.login {
+    padding: 2rem 2rem 3rem;
+    box-shadow: 3px 3px 5px 0px #c1c1c1, -3px 3px 5px 0px #c1c1c1;
+    border-radius: 0.3rem;
+    background-color: #FFF7F7;
+}
+
+.login input {
+    padding: 0.5rem;
+    margin-top: 7px;
+    width: 300px;
+    background-color: #FFF7F7;
+    border: 2px solid #E5E5E5;
+    border-radius: 5px;
+}
+
+.login_btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login_btn button {
+    background-color: rgb(99, 214, 21);
+    border: hidden;
+    border-radius: 1.4rem;
+    font-size: 1rem;
+    font-family: var(--body-font);
+    font-weight: var(--font-medium);
+    color: #FFF7F7;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.forgot:hover {
+    color: rgb(99, 214, 21);
+}
+
+.register input {
+    width: 300px;
 }

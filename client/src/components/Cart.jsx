@@ -1,84 +1,37 @@
 import { React, useContext, useEffect, useState } from "react";
-import { CartContext } from './CartContext';
+import { useHistory } from "react-router";
+import CartContext from './context/cart/CartContext'
 
 const Cart = () => {
 
-  let total = 0;
+  const history = useHistory();
+  const { cart, addToCart, deleteItem, getCart, removeItem, getTotal, total } = useContext(CartContext)
 
-  const [products, setProducts] = useState([]);
-  const { cart, setCart } = useContext(CartContext);
-  const [priceFetched, togglePriceFetched] = useState(false);
+  const decreaseItem = (e, id) => {
+    e.preventDefault();
+    removeItem(id, 1);
+  }
+
+  const increaseItem = (e, id) => {
+    e.preventDefault();
+    addToCart(id, 1);
+  }
 
   useEffect(() => {
-    if (!cart.items) {
-      return;
+    
+    if(localStorage.getItem('token')){
+      getCart();
+      getTotal();
     }
-
-    if (priceFetched) {
-      return;
+    else{
+      history.push("/login");
     }
-
-    fetch("/api/products/cart-items", {
-      method: 'POST', // or 'PUT'
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ids: Object.keys(cart.items) })
-    }).then(res => res.json())
-      .then(products => {
-        setProducts(products);
-        togglePriceFetched(true);
-      })
-  }, [cart, priceFetched])
-
-
-  const getQuantity = (productId) => {
-    return (cart.items[productId]);
-  }
-
-  const increament = (productId) => {
-    const oldQty = cart.items[productId];
-    const _cart = { ...cart };
-    _cart.items[productId] = oldQty + 1;
-    _cart.totalItem += 1;
-    setCart(_cart);
-  }
-
-  const decreament = (productId) => {
-    const oldQty = cart.items[productId];
-    if (oldQty === 1) {
-      return;
-    }
-    const _cart = { ...cart };
-    _cart.items[productId] = oldQty - 1;
-    _cart.totalItem -= 1;
-    setCart(_cart);
-  }
-
-  const getSum = (productId, price) => {
-    const sum = price * getQuantity(productId);
-    total += sum;
-    return sum;
-  }
-
-  const handleDelete = (productId) => {
-    const _cart = { ...cart };
-    const qty = _cart.items[productId];
-    delete _cart.items[productId];
-    _cart.totalItem -= qty;
-    setCart(_cart);
-    setProducts(products.filter((product) => product._id !== productId));
-  }
-
-  const handleOrderNow = () => {
-    window.alert("Order Placed Succesfully!");
-    setCart({});
-    setProducts([]);
-  }
+   
+  }, [])
 
   return (
 
-    !products.length
+    !cart.length
       ? <img style={{
         position: 'absolute',
         left: '25%'
@@ -89,15 +42,29 @@ const Cart = () => {
           <h2 className="cart__title">Cart Items</h2>
           <ul className="grid" style={{ margin: '2rem 5rem' }}>
             {
-              products.map(product => {
+              cart.map(product => {
                 return (
                   <li key={product._id}>
                     <div className="cart__item grid">
                       <div className="item__info">
-                        <img width="60px" src={product.image} alt="" />
-                        <h3>{product.name}</h3>
+                        <img width="60px" src={product.productbyId.image} alt="" />
+                        <h3>{product.productbyId.name}</h3>
                       </div>
                       <div>
+                        <b>{product.productbyId.size}</b>
+                      </div>
+                      <div>
+                        <button className="quantity__btn" onClick={(event) => { decreaseItem(event, product.id) }}>-</button>
+                        <b className="quantity">{product.quantity}</b>
+                        <button className="quantity__btn" onClick={(event) => { increaseItem(event, product.id) }} >+</button>
+                      </div>
+                      <div>
+                        <b>₹ {product.productbyId.price * product.quantity}</b>
+                      </div>
+                      <div>
+                        <button className="delete__btn" onClick={() => { deleteItem(product._id) }} >DELETE</button>
+                      </div>
+                      {/* <div>
                         <button onClick={() => { decreament(product._id) }} className="quantity__btn">-</button>
                         <b className="quantity">{getQuantity(product._id)}</b>
                         <button onClick={() => { increament(product._id) }} className="quantity__btn">+</button>
@@ -107,7 +74,7 @@ const Cart = () => {
                       </div>
                       <div>
                         <button onClick={() => { handleDelete(product._id) }} className="delete__btn">DELETE</button>
-                      </div>
+                      </div> */}
                     </div>
                   </li>
                 );
@@ -117,9 +84,9 @@ const Cart = () => {
             <div style={{ textAlign: 'end' }}>
               <h3>Grand Total : ₹ {total}</h3>
             </div>
-            <div style={{ textAlign: 'end' }}>
+            {/* <div style={{ textAlign: 'end' }}>
               <button onClick={handleOrderNow} className="order__btn">ORDER NOW</button>
-            </div>
+            </div> */}
           </ul>
         </div>
       </>

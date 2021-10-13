@@ -2,7 +2,9 @@
 import { React, useState, useEffect } from 'react'
 import Product from './Product'
 
-const Product_home = () => {
+const Product_home = (props) => {
+
+    const {showAlert} = props;
 
     const [products, setProducts] = useState([]);
 
@@ -20,12 +22,11 @@ const Product_home = () => {
                 <h2>Products</h2>
             </div>
             <div className="product__list">
-                <ul className="product__items grid">
+                <ul className="product__items grid">  
 
                     {
-                        products.map(product => <Product key={product._id} product={product} />)
+                        products.map(product => <Product key={product._id} product={product} showAlert={showAlert} />)
                     }
-
 
                 </ul>
             </div>

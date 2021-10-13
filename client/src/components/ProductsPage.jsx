@@ -1,10 +1,13 @@
 import React from "react";
-import Products from './Product_home';
+import Product_home from './Product_home';
 
-const ProductsPage = () => {
+const ProductsPage = (props) => {
+
+  const {showAlert} = props;
+
   return (
     <div className="products container grid">
-      <Products />
+      <Product_home showAlert={showAlert} />
     </div>
   );
 };
