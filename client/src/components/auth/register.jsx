@@ -26,8 +26,6 @@ const Register = (props) => {
         });
 
         const json = await res.json();
-        console.log(json);
-
         // if (res.status === 422 || !data) {
         //     res.status(401).send("User not Found");
         // }
